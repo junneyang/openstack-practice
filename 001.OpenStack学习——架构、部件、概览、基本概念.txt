@@ -1,0 +1,49 @@
+1、openstack组件
+2、整体架构图（Keystone、Nova、Neutron、Galance、Cinder、Swift、Ceilometer、Heat、Horizon）
+——Trove数据库服务、Ironic裸机部署服务、Maraoni队列通信服务、Moriker域名服务、Convection工作流服务、Hadoop集群服务等子项目
+3、Nova计算服务
+3.1 VM/Container生命周期管理
+3.2 基于Restful的API
+3.3 屏蔽Hypervisor，支持KVM、Xen、Hyper-V、Docker等等
+3.4 支持大规模水平伸缩
+4、Neutron网络服务
+4.1 虚拟机网络管理
+4.2 面向租户的网络管理SDN（租户网络隔离，与其他租户网络互不干扰）
+4.3 可配置plugin架构（Neutron负责抽象框架，具体网络管理实现如openswitch、bridge等以插件的形式提供）
+4.4 基于restful的API
+5、Keystone身份认证服务
+5.1 认证与授权
+5.2 用户租户角色管理
+5.3 服务目录管理
+5.4 多认证机制（MySQL、LDAP、AD认证等方式）
+6、Galance镜像服务
+6.1 镜像注册查询等管理（可以理解为虚拟机模板）
+6.2 基于角色的访问控制（共享机制）
+6.3 支持多种镜像格式（raw、qcow2等）
+6.4 支持多种后端存储（亚马逊S3、Swift、File System等）
+6.5 Restful的API
+7、Horizon控制面板服务
+8、Cinder块存储
+8.1 类似EBS的块存储服务
+8.2 减少nova的复杂性，降低nova的负载
+8.3 支持多种后端存储（iSCSI、NFS、ceph分布式对象存储系统）
+9、Swift对象存储（没有以前火爆了，GlusterFS、ceph都可以作为其替代的方案，但是可靠，生产环境大规模部署验证过的）
+9.1 可靠对象存储
+9.2 没有容量限制
+9.3 无单点故障
+9.4 支持S3的API
+10、HEAT编排服务
+10.1 应用资源模板定义环境（如Apache环境）
+10.2 云资源拓扑与编排
+10.3 兼容AWS CloudFormation
+11、Ceilometer计量服务
+11.1 资源监控与度量
+12、流行的部署方式
+12.1 计算节点  网络节点  控制节点
+12.2 Tenant租户、User用户、Role角色
+12.3 admin（project、系统情况）、user（看不到系统情况）
+12.4 新建虚拟机-网络、磁盘、网络拓扑、router、网段、私有IP、浮动IP
+12.5 概念（Region区域数据中心的概念上海数据中心北京数据中心、
+Zone机房机柜小范围高可用、
+cell几套openstack调度多套环境可以看到、针对多套环境二级调度底层资源
+Host Aggregate同属性计算资源如按照性能划分或者按照AMD Intel等架构划分，主机的调度细化而且可以防止出现兼容性问题）
