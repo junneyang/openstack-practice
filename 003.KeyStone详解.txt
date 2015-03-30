@@ -1,0 +1,71 @@
+*******************************************************************************************************************
+******KeyStone详解*************************************************************************
+*******************************************************************************************************************
+0、基本概念
+身份认证：用户管理
+令牌发放校验：sessoin管理、是否已经登录过等，校验通过才能进行后续操作
+服务列表：有哪些服务可以使用
+角色权限管理：用户、角色、权限铁三角
+User-Tenant二元组(多对多关系)、Role、Service、Token(可以理解为Session)、Endpoint(服务的url)
+1、KeyStone工作流程
+2、KeyStone环境搭建
+3、cli使用
+4、api使用
+
+tenant	project
+user	user
+role	role
+user-role	assignment
+service	service
+endpoint	endpoint
+keystone token-get
+
+api返回消息示例:
+{
+    "access": {
+        "token": {
+            "issued_at": "2015-03-16T07:07:46.531470",
+            "expires": "2015-03-16T08:07:46Z",
+            "id": "MIIEtQYJKoZIhvcNAQcCoIIEpjCCBKICAQExCTAHBgUrDgMCGjCCAwsGCSqGSIb3DQEHAaCCAvwEggL4eyJhY2Nlc3MiOiB7InRva2VuIjogeyJpc3N1ZWRfYXQiOiAiMjAxNS0wMy0xNlQwNzowNzo0Ni41MzE0NzAiLCAiZXhwaXJlcyI6ICIyMDE1LTAzLTE2VDA4OjA3OjQ2WiIsICJpZCI6ICJwbGFjZWhvbGRlciIsICJ0ZW5hbnQiOiB7ImRlc2NyaXB0aW9uIjogIkFkbWluIFRlbmFudCIsICJlbmFibGVkIjogdHJ1ZSwgImlkIjogImM3OWQ5ZWE3OGY4MjQ0OGM4NTQ1MTA3NjM4M2UyMTc2IiwgIm5hbWUiOiAiYWRtaW4ifX0sICJzZXJ2aWNlQ2F0YWxvZyI6IFt7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly9jb250cm9sbGVyMDozNTM1Ny92Mi4wIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXIwOjUwMDAvdjIuMCIsICJpZCI6ICI1Mjg3MDgyODU2MGY0MjhmODVlOTcwYWQ1OWQ0YWViNyIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXIwOjUwMDAvdjIuMCJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJpZGVudGl0eSIsICJuYW1lIjogImtleXN0b25lIn1dLCAidXNlciI6IHsidXNlcm5hbWUiOiAiYWRtaW4iLCAicm9sZXNfbGlua3MiOiBbXSwgImlkIjogIjljMmE3NGJiYjM4NzQ4MjlhMDAzNGFjMGM1ZWQ3MDA0IiwgInJvbGVzIjogW3sibmFtZSI6ICJhZG1pbiJ9XSwgIm5hbWUiOiAiYWRtaW4ifSwgIm1ldGFkYXRhIjogeyJpc19hZG1pbiI6IDAsICJyb2xlcyI6IFsiZjQyZmRiYzQyZDVkNDg5ZTg5NWUwYWQ3OGVjOTc0MDkiXX19fTGCAYEwggF9AgEBMFwwVzELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVVuc2V0MQ4wDAYDVQQHDAVVbnNldDEOMAwGA1UECgwFVW5zZXQxGDAWBgNVBAMMD3d3dy5leGFtcGxlLmNvbQIBATAHBgUrDgMCGjANBgkqhkiG9w0BAQEFAASCAQA2OUwobWKcVrqoU+KMvJIfWTztQhbJUAoBFvycdMjnBU2Bwc1SdVZygNoaWG8lvHmdH7QN69ZaCu8dfDiwHUX0f8MHv5tm4tI3lGh-aWHRpFqdKsPDK10Q0+WxnQExpF60icn47HVvTXYkSCCxJobGM9wcTmRhDH9JCEKdzI1Mi86uRbVNcELp3djpjR8Rb-Bqv+FP8HAy1sbFv3-xDSky+Irh0YzE9FDzNk+yhyAwlnZUNYRq7ajr0123znP9ABRjqEBN+KabigjnP-VPewNQybwNNy8iNDPKnXfqlo2Yp7kGIXxYetS6bh7Ha5+OlI0GkbgHdhucv4fKyCLE+z-w",
+            "tenant": {
+                "description": "Admin Tenant",
+                "enabled": true,
+                "id": "c79d9ea78f82448c85451076383e2176",
+                "name": "admin"
+            }
+        },
+        "serviceCatalog": [
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller0:35357/v2.0",
+                        "region": "regionOne",
+                        "internalURL": "http://controller0:5000/v2.0",
+                        "id": "52870828560f428f85e970ad59d4aeb7",
+                        "publicURL": "http://controller0:5000/v2.0"
+                    }
+                ],
+                "endpoints_links": [],
+                "type": "identity",
+                "name": "keystone"
+            }
+        ],
+        "user": {
+            "username": "admin",
+            "roles_links": [],
+            "id": "9c2a74bbb3874829a0034ac0c5ed7004",
+            "roles": [
+                {
+                    "name": "admin"
+                }
+            ],
+            "name": "admin"
+        },
+        "metadata": {
+            "is_admin": 0,
+            "roles": [
+                "f42fdbc42d5d489e895e0ad78ec97409"
+            ]
+        }
+    }
+}

@@ -1,0 +1,78 @@
+*******************************************************************************************************************
+******openstack管理机器准备(使用KVM虚拟机)*************************************************************************
+*******************************************************************************************************************
+0、宿主机：10.81.5.232
+ssh root@db-sim-xwin01.db01.baidu.com
+isys.INIT@2014
+cd /home/users/yangjun03
+
+1、虚拟机-依次为控制节点、网络节点、计算节点
+linux01 : ssh root@10.81.5.236 123456 8901 2U2G50G
+linux02 : ssh root@10.81.5.238 123456 8902 2U2G50G
+linux03 : ssh root@10.81.5.240 123456 8903 2U2G50G
+
+2、虚拟机创建过程
+/home/users/yangjun03
+存储
+cd /home/users/yangjun03/img_dir
+qemu-img create -f qcow2 win.img 50G
+计算
+virt-install --name=win --ram=2048 --vcpus=2 \
+--disk path=/home/users/yangjun03/img_dir/win.img,device=disk,format=qcow2 --accelerate \
+--cdrom=/home/users/yangjun03/iso_pkg/CentOS-6.3-x86_64-minimal.iso \
+--os-type=linux --os-variant=rhel6 \
+--network bridge,bridge=br0 \
+--graphics vnc,listen=0.0.0.0,port=8901,password=123456 --force --autostart
+
+virt-install --name=win --ram=8192 --vcpus=8 \
+--disk path=/home/users/yangjun03/img_dir/win.img,device=disk,format=qcow2 --accelerate \
+--cdrom=/home/users/yangjun03/iso_pkg/cn_windows_7_ultimate_with_sp1_x64_dvd_618537.iso \
+--os-type=windows --os-variant=win7 \
+--network bridge,bridge=br0 \
+--graphics vnc,listen=0.0.0.0,port=8904,password=123456 --force --autostart
+网络
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+	DEVICE=eth0
+	BOOTPROTO=static
+	IPADDR=10.81.5.237
+	NETMASK=255.255.255.0
+	ONBOOT=yes
+service network restart
+路由/防火墙
+/etc/init.d/iptables stop
+route add -net 0.0.0.0 netmask 0.0.0.0 gw 10.81.5.1
+DNS配置
+vi /etc/resolv.conf
+	options timeout:2
+	options rotate
+	search baidu.com
+	nameserver 10.46.0.231
+	nameserver 10.46.0.237
+ping yum.baidu.com
+
+*******************************************************************************************************************
+******Keystone安全认证服务*************************************************************************
+*******************************************************************************************************************
+1、一般根据地理位置划分区域(如单个机房)，分别部署一套独立的完整的openstack环境，包括控制节点，计算节点等。
+但同时，为了便于管理，多个region会共用一套keystone和dashboard，这样我们可以使用统一的账户信息及统一的管理平台。
+2、安装mysq
+yum -y install mysql-server mysql-python
+chkconfig mysqld on
+service mysqld start
+3、root用户密码设置
+/usr/bin/mysqladmin -u root password 'root'
+4、新建keystone用户
+grant all privileges on *.* to 'keystone'@'%' IDENTIFIED BY 'keystone' WITH GRANT OPTION;
+grant all privileges on *.* to 'keystone'@'localhost' IDENTIFIED BY 'keystone' WITH GRANT OPTION;
+FLUSH   PRIVILEGES;
+5、安装RabbitMQ/qpid消息队列
+
+
+
+virt-install --name=devstack --ram=4096 --vcpus=4 \
+--disk path=/home/users/yangjun03/img_dir/devstack.img,device=disk,format=qcow2 --accelerate \
+--cdrom=/home/users/yangjun03/iso_pkg/CentOS-6.3-x86_64-minimal.iso \
+--os-type=linux --os-variant=rhel6 \
+--network bridge,bridge=br0 \
+--graphics vnc,listen=0.0.0.0,port=8901,password=123456 --force --autostart
+
